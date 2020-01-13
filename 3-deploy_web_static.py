@@ -15,8 +15,9 @@ def do_pack():
         os.mkdir("versions")
     try:
         _time = time.strftime("%Y%m%d%H%M%S", time.gmtime())
-        o = local("tar -zvcf ./versions/web_static_%s.tgz ./web_static/" % _time)
-        return "versions/web_static"+_time+".tgz"
+        o = local("tar -zvcf ./versions/web_static_%s.tgz ./web_static/"
+                  % _time)
+        return "./versions/web_static_"+_time+".tgz"
     except Exception:
         return None
 
@@ -47,4 +48,4 @@ def deploy():
     packed = do_pack()
     if not packed:
         return False
-    return do_deploy(packed)
+    do_deploy(packed)
