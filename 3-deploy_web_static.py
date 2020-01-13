@@ -7,16 +7,18 @@ import time
 
 env.hosts = ["35.237.94.227", "35.231.144.217"]
 env.user = "ubuntu"
-env.key_filename = '~/.ssh/key_holberton'
 
 
 def do_pack():
     """Make a tar.gz archive of da (a directory under ./web_static/)."""
     if not os.path.isdir("versions"):
         os.mkdir("versions")
-    o = local("tar -zvcf ./versions/web_static_%s.tgz ./web_static/"
-              % (time.strftime("%Y%m%d%H%M%S", time.gmtime())))
-    return o
+    try:
+        _time = time.strftime("%Y%m%d%H%M%S", time.gmtime())
+        o = local("tar -zvcf ./versions/web_static_%s.tgz ./web_static/" % _time)
+        return "versions/web_static"+_time+".tgz"
+    except Exception:
+        return None
 
 
 def do_deploy(archive_path):
