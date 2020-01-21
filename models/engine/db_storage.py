@@ -45,7 +45,10 @@ class DBStorage:
                 session = sess.query(eval(cls)).all()
                 create_dict(_dict, session)
         else:
-            session = sess.query(eval(cls)).all()
+            if type(cls) is not str:
+                session = sess.query(cls).all()
+            else:
+                session = sess.query(eval(cls)).all()
             create_dict(_dict, session)
         return _dict
 
