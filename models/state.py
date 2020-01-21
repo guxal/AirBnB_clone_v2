@@ -18,16 +18,20 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     if storage_type == 'db':
         name = Column(String(128), nullable=False)
-        cities = relationship('City', cascade="all, delete", backref="state")
+        cities = relationship('City', cascade="all, delete-orphan", backref="state")
     else:
         name = ""
 
     if storage_type != 'db':
         @property
         def cities(self):
+            """
+            join cities with state_id
+            """
             list_cities = []
-            all_cities = model.storage.all(City)
+            all_cities = models.storage.all(City)
             for key, city_obj in all_cities.items():
+                print(city_obj.__dict__)                
                 if city_obj.state_id == self.id:
                     list_cities.append(city_obj)
             return list_cities

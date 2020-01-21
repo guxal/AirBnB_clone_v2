@@ -38,6 +38,7 @@ class BaseModel:
                     setattr(self, key, value)
                 if not kwargs.get('id'):
                     self.id = str(uuid.uuid4())
+                    self.created_at = self.updated_at = datetime.now()
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
@@ -48,7 +49,7 @@ class BaseModel:
             Returns a string of class name, id, and dictionary
         """
         return "[{}] ({}) {}".format(
-            type(self).__name__, self.id, self.to_dict())
+            type(self).__name__, self.id, self.__dict__)
 
     def __repr__(self):
         """return a string representaion
@@ -78,4 +79,4 @@ class BaseModel:
 
     def delete(self):
         # can be object
-        models.storage.delete(self.to_dict())
+        models.storage.delete(self)

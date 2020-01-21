@@ -10,6 +10,10 @@ from models.place import Place
 from models.review import Review
 
 
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
+
+
 class FileStorage:
     """This class serializes instances to a JSON file and
     deserializes JSON file to instances
@@ -25,7 +29,19 @@ class FileStorage:
         Return:
             returns a dictionary of __object
         """
-        return self.__objects
+        fs_objects = {}
+        if cls:
+            if type(cls) is str and cls in classes:
+                for key, val in self.__objects.items():
+                    if cls == key.split('.')[0]:
+                        fs_objects[key] = val
+            elif cls.__name__ in classes:
+                for key, val in self.__objects.items():
+                    if cls.__name__ == key.split('.')[0]:
+                        fs_objects[key] = val
+        else:
+            return self.__objects
+        return fs_objects
 
     def new(self, obj):
         """sets __object to given obj
@@ -62,3 +78,8 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
+
+    def close(self):
+        """close
+        """
+        self.reload()
