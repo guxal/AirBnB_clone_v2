@@ -31,7 +31,7 @@ def hbnb_filters():
         all_states.append(v)
     for k, v in _dict_amenities.items():
         all_amenities.append(v)
-    return render_template('10-hbnb_filters2.html', all_states=all_states,
+    return render_template('10-hbnb_filters.html', all_states=all_states,
                            all_amenities=all_amenities)
 
 
